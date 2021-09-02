@@ -10,7 +10,9 @@ const Main = styled.main`
   padding: 10px;
   
   .cards {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-gap: 10px;
   }
 `;
 
@@ -47,27 +49,12 @@ export default function Home({ results }) {
 }
 
 export async function getServerSideProps() {
-  const fetchUrl = "http://localhost:3000/api/product";
+  const res = await fetch("http://localhost:3000/api/product")
+  const data = await res.json()
 
   return {
     props: {
-      results: [
-        {
-          name: "Unbranded Concrete Gloves",
-          description:
-            "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support",
-          price: "860.00",
-          image: "http://placeimg.com/640/480/cats",
-          id: "123",
-        },
-        {
-          id: "24523",
-          name: "Gorgeous Wooden Chicken",
-          description:
-            "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals",
-          image: "http://placeimg.com/640/480/nightlife",
-        },
-      ],
+      results: data.results
     },
   };
 }
