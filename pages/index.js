@@ -18,7 +18,14 @@ const Main = styled.main`
 
 export default function Home({ results }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [perPage] = useState(12);
+
+  const lastOf = currentPage * perPage
+  const firstOf = lastOf - perPage
+  const currentResults = results.slice(firstOf, lastOf)
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+
   return (
     <div className={styles.wrapper}>
       <Head>
@@ -31,7 +38,7 @@ export default function Home({ results }) {
         <h1>Live Pairing Tech Test</h1>
 
         <section className="cards">
-          {results.map(({ id, name, description, price, image }) => (
+          {currentResults.map(({ id, name, description, price, image }) => (
             <Card
               key={id}
               name={name}
@@ -42,7 +49,7 @@ export default function Home({ results }) {
           ))}
         </section>
 
-        <Pagination currentPage={currentPage} totalPages={totalPages} />
+        <Pagination perPage={perPage} totalResults={results.length} paginate={paginate} currentPage={currentPage} />
       </Main>
     </div>
   );

@@ -32,9 +32,20 @@ const StyledNav = styled.nav`
     left: 50%;
     transform: translateX(-50%)
   } */
+
+  .active {
+    background-color: rebeccapurple;
+    color: #fff
+  }
 `;
 
-export function Pagination({ currentPage, totalPages }) {
+export function Pagination({ perPage, totalResults, paginate, currentPage }) {
+  const pageNumbers = []
+
+  for(let i = 1; i <= Math.ceil(totalResults / perPage); i++) {
+    pageNumbers.push(i)
+  }
+
   return (
     <StyledNav aria-label="Pagination">
       <ul>
@@ -43,24 +54,33 @@ export function Pagination({ currentPage, totalPages }) {
             type="button"
             disabled={currentPage === 1}
             aria-label={`Go To Page ${currentPage - 1}`}
+            onClick={() => paginate(currentPage - 1)}
           >
             Previous Page
           </button>
         </li>
+
         <li>
-          <button
-            type="button"
-            aria-current="true"
-            aria-label={`Current Page, Page ${currentPage}`}
-          >
-            {currentPage}
-          </button>
+          {pageNumbers.map(number => (
+            <button
+              key={number}
+              className={currentPage === number ? "active" : null}
+              type="button"
+              aria-current="true"
+              aria-label={`Current Page, Page ${currentPage}`}
+              onClick={() => paginate(number)}
+            >
+              {number}
+            </button>
+          ))}
         </li>
+
         <li>
           <button
             type="button"
-            disabled={currentPage === totalPages}
+            disabled={currentPage === pageNumbers.length}
             aria-label={`Go To Page ${currentPage + 1}`}
+            onClick={() => paginate(currentPage + 1)}
           >
             Next Page
           </button>
